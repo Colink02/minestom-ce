@@ -724,6 +724,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         final List<TimedPotion> effects = this.effects;
         if (effects.isEmpty()) return;
         effects.removeIf(timedPotion -> {
+            //Potions set to -1 are considered infinite by the client since <= 1.19.4
+            if(timedPotion.getPotion().duration() == -1) return false;
             final long potionTime = (long) timedPotion.getPotion().duration() * MinecraftServer.TICK_MS;
             // Remove if the potion should be expired
             if (time >= timedPotion.getStartingTime() + potionTime) {
